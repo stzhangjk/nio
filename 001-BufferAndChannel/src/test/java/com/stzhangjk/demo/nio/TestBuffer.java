@@ -64,11 +64,8 @@ public class TestBuffer {
     public void testCopy() {
         String src = ClassLoader.getSystemResource("test.txt").getFile();
         String dst = ClassLoader.getSystemResource("").getFile() + "testCopy.txt";
-        FileChannel in = null;
-        FileChannel out = null;
-        try {
-            in = new FileInputStream(src).getChannel();
-            out = new FileOutputStream(dst).getChannel();
+        try(FileChannel in = new FileInputStream(src).getChannel();
+            FileChannel out = new FileOutputStream(dst).getChannel()) {
             ByteBuffer buffer = ByteBuffer.allocate(10);
             while (in.read(buffer) != -1) {
                 buffer.flip();
@@ -79,21 +76,6 @@ public class TestBuffer {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
